@@ -13,30 +13,16 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class OOPingApp extends JFrame {
-
-    String text;
     XYSeries series = new XYSeries("Ping Attempt");
-
     XYSeriesCollection dataset = new XYSeriesCollection();
-    int i = 0;
-    String ms;
+
+    LogsPanel logsPanel;
+    ButtonsPanel buttonsPanel;
 
     public OOPingApp() {
-        setLayout(new GridLayout(1,3));
-        JTextArea jTextArea = new JTextArea();
-
-        JScrollPane scrollPane_kafka = new JScrollPane(jTextArea);
-        scrollPane_kafka.createHorizontalScrollBar();
-        scrollPane_kafka.createVerticalScrollBar();
-        scrollPane_kafka.setBounds(300,300,600,200);
-
-        String[] commands = {"C:\\Windows\\System32\\ping.exe", "www.youtube.com", "-n", "200"};
+        setLayout(new GridLayout(1, 3));
 
         JFreeChart chart = createChart();
 
@@ -44,19 +30,18 @@ public class OOPingApp extends JFrame {
         chartPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         chartPanel.setBackground(Color.white);
 
-        JPanel panel = new JPanel();
-        JLabel jLabel = new JLabel();
 
-        jLabel.setText("Here will be configuration buttons and stuff");
-        panel.add(jLabel);
 
-        add(panel);
+        logsPanel = new LogsPanel();
+        logsPanel.setSeries(series);
+
+        buttonsPanel = new ButtonsPanel();
+
+        add(buttonsPanel);
         add(chartPanel);
-        add(scrollPane_kafka);
+        add(logsPanel);
 
-        redirectCLIOutput(jTextArea, commands);
-
-        setSize(1280,720);
+        setSize(1280, 720);
         setTitle("OOPing - OOPong");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -98,46 +83,5 @@ public class OOPingApp extends JFrame {
         chart.setTitle(new TextTitle("Ping - Pong", new Font("Serif", java.awt.Font.BOLD, 18)));
 
         return chart;
-    }
-
-
-    private void redirectCLIOutput(JTextArea screen, String[] commands) {
-        try {
-            ProcessBuilder processBuilder = new ProcessBuilder(commands);
-            processBuilder.redirectErrorStream(true);
-            Process process = processBuilder.start();
-
-            InputStream inputStream = process.getInputStream();
-
-            Thread outputReaderThread = new Thread(() -> {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        appendText(line, screen);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-
-            outputReaderThread.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void appendText(String text, JTextArea screen) {
-        SwingUtilities.invokeLater(() -> {
-            this.text = text;
-
-            ms = text.split("time=", 2)[1].split("ms", 2)[0];
-
-            i++;
-
-            series.add(i, Integer.valueOf(ms));
-
-            screen.append(text + "\n");
-            screen.setCaretPosition(screen.getDocument().getLength());
-        });
     }
 }
