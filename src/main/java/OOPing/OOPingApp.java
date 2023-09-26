@@ -21,8 +21,13 @@ public class OOPingApp extends JFrame {
     LogsPanel logsPanel;
     ButtonsPanel buttonsPanel;
 
+    private XYLineAndShapeRenderer renderer;
+
     public OOPingApp() {
-        setLayout(new GridLayout(1, 3));
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        setLayout(new GridBagLayout());
+
+//        setLayout(new GridLayout(1, 3));
 
         JFreeChart chart = createChart();
 
@@ -30,16 +35,31 @@ public class OOPingApp extends JFrame {
         chartPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         chartPanel.setBackground(Color.white);
 
-
-
         logsPanel = new LogsPanel();
         logsPanel.setSeries(series);
 
         buttonsPanel = new ButtonsPanel();
 
-        add(buttonsPanel);
-        add(chartPanel);
-        add(logsPanel);
+        System.out.println(renderer);
+        buttonsPanel.setChartRenderer(renderer);
+
+        gridBagConstraints.fill = GridBagConstraints.VERTICAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 1.0;
+
+        add(buttonsPanel, gridBagConstraints);
+
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+
+        add(chartPanel, gridBagConstraints);
+
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.4;
+        gridBagConstraints.weighty = 1.0;
+
+        add(logsPanel, gridBagConstraints);
 
         setSize(1280, 720);
         setTitle("OOPing - OOPong");
@@ -64,7 +84,7 @@ public class OOPingApp extends JFrame {
 
         XYPlot plot = chart.getXYPlot();
 
-        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        renderer = new XYLineAndShapeRenderer();
         renderer.setSeriesPaint(0, Color.magenta);
         renderer.setSeriesStroke(0, new BasicStroke(3.5f));
         renderer.setDrawOutlines(true);
