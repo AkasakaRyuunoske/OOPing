@@ -51,7 +51,7 @@ public class LogsPanel extends JPanel {
             ProcessBuilder processBuilder = new ProcessBuilder(commands);
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
-
+            System.out.println(process.info());
             InputStream inputStream = process.getInputStream();
 
             Thread outputReaderThread = new Thread(() -> {
@@ -77,7 +77,7 @@ public class LogsPanel extends JPanel {
             endOfDocument = screen.getDocument().getLength();
 
             try {
-                ms = text.split("time=", 2)[1].split("ms", 2)[0];
+                ms = text.split("durata=", 2)[1].split("ms", 2)[0];
             } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException){
                 String errorMessage = "Something went wrong. \n";
 

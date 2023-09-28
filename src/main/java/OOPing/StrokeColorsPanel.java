@@ -18,6 +18,7 @@ public class StrokeColorsPanel extends JPanel implements ActionListener {
     private JButton color_8_button;
     private JButton color_9_button;
 
+    private JButton stopButton;
     private XYLineAndShapeRenderer renderer;
 
     public StrokeColorsPanel() {
@@ -63,6 +64,11 @@ public class StrokeColorsPanel extends JPanel implements ActionListener {
         add(color_7_button);
         add(color_8_button);
         add(color_9_button);
+
+        stopButton = new JButton();
+        stopButton.setText("Stop");
+
+        add(stopButton);
     }
 
     @Override
@@ -79,27 +85,27 @@ public class StrokeColorsPanel extends JPanel implements ActionListener {
 
         if (e.getSource() == color_3_button){
             System.out.println("color 3 selected");
-            renderer.setSeriesPaint(0, new Color(111, 24, 211));
+            renderer.setSeriesPaint(0, Color.BLACK);
         }
 
         if (e.getSource() == color_4_button){
             System.out.println("color 4 selected");
-            renderer.setSeriesPaint(0, Color.GRAY);
+            renderer.setSeriesPaint(0, new Color(111, 24, 211));
         }
 
         if (e.getSource() == color_5_button){
             System.out.println("color 5 selected");
-            renderer.setSeriesPaint(0, Color.PINK);
+            renderer.setSeriesPaint(0, Color.GRAY);
         }
 
         if (e.getSource() == color_6_button){
             System.out.println("color 6 selected");
-            renderer.setSeriesPaint(0, new Color(248, 195, 245));
+            renderer.setSeriesPaint(0, Color.PINK);
         }
 
         if (e.getSource() == color_7_button){
             System.out.println("color 7 selected");
-            renderer.setSeriesPaint(0, Color.BLACK);
+            renderer.setSeriesPaint(0, new Color(248, 195, 245));
         }
 
         if (e.getSource() == color_8_button){
@@ -110,6 +116,10 @@ public class StrokeColorsPanel extends JPanel implements ActionListener {
         if (e.getSource() == color_9_button){
             System.out.println("color 9 selected");
             renderer.setSeriesPaint(0, Color.BLACK);
+        }
+
+        if (e.getSource() == stopButton) {
+            System.out.println("Stopping...");
         }
     }
 
