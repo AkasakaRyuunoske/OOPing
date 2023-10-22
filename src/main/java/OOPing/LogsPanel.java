@@ -13,21 +13,30 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 
 public class LogsPanel extends JPanel {
+    private JPanel statisticsPanel;
     private JTextArea logsScreen;
     private JLabel title;
+    private JLabel greens_counterLabel;
+    private int greens_counter = 0;
+    private JLabel reds_counterLabel;
+    private int reds_counter = 0;
+    private JLabel yellows_counterLabel;
+    private int yellows_counter = 0;
     private JScrollPane screenScroll;
 
     private int attemptsCounter = 0;
 
     private XYSeries series;
 
-    private String[] commands = {"C:\\Windows\\System32\\ping.exe", "www.youtube.com", "-n", "200"};
+    private String[] commands = {"C:\\Windows\\System32\\ping.exe", "www.youtube.com", "-n", "200000"};
 
-    private String text;
     private String ms;
     private int endOfDocument;
     public LogsPanel(){
         setLayout(new GridLayout(2,1));
+        statisticsPanel = new JPanel();
+        statisticsPanel.setLayout(new GridLayout(1,3));
+
         logsScreen = new JTextArea();
 
         logsScreen.append("Here you will see logs of ping execution \n");
@@ -39,8 +48,27 @@ public class LogsPanel extends JPanel {
 
         title = new JLabel("Program logs:");
         title.setHorizontalAlignment(SwingConstants.CENTER);
+        title.setVerticalTextPosition(SwingConstants.TOP);
+        title.setVerticalAlignment(SwingConstants.TOP);
+
+        greens_counterLabel = new JLabel();
+        greens_counterLabel.setBackground(Color.green);
+        greens_counterLabel.setOpaque(true);
+
+        reds_counterLabel = new JLabel();
+        reds_counterLabel.setBackground(Color.red);
+        reds_counterLabel.setOpaque(true);
+
+        yellows_counterLabel = new JLabel();
+        yellows_counterLabel.setBackground(Color.yellow);
+        yellows_counterLabel.setOpaque(true);
+
+        statisticsPanel.add(greens_counterLabel);
+        statisticsPanel.add(reds_counterLabel);
+        statisticsPanel.add(yellows_counterLabel);
 
         add(title);
+        add(statisticsPanel);
         add(screenScroll);
 
         redirectCLIOutput(logsScreen, commands);
@@ -73,11 +101,10 @@ public class LogsPanel extends JPanel {
 
     private void appendText(String text, JTextArea screen) {
         SwingUtilities.invokeLater(() -> {
-            this.text = text;
             endOfDocument = screen.getDocument().getLength();
 
             try {
-                ms = text.split("durata=", 2)[1].split("ms", 2)[0];
+                ms = text.split("time=", 2)[1].split("ms", 2)[0];
             } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException){
                 String errorMessage = "Something went wrong. \n";
 
@@ -85,8 +112,8 @@ public class LogsPanel extends JPanel {
                 screen.setCaretPosition(endOfDocument);
 
                 try {
-                    System.out.println("Start offset: " + (endOfDocument - errorMessage.length()));
-                    System.out.println("End offset: " + endOfDocument);
+//                    System.out.println("Start offset: " + (endOfDocument - errorMessage.length()));
+//                    System.out.println("End offset: " + endOfDocument);
 
                     screen.getHighlighter().addHighlight((endOfDocument - errorMessage.length()), endOfDocument, new DefaultHighlighter.DefaultHighlightPainter(Color.red));
                 } catch (BadLocationException e) {
@@ -108,23 +135,25 @@ public class LogsPanel extends JPanel {
 
                 if (Integer.parseInt(ms) > 0 && Integer.parseInt(ms) <= 80) {
                     screen.getHighlighter().addHighlight(endOfDocument, endOfDocument + text.length(), new DefaultHighlighter.DefaultHighlightPainter(Color.GREEN));
+                    greens_counter++;
+                    greens_counterLabel.setText(String.valueOf(greens_counter));
+
 
                     return;
                 }
 
                 if (Integer.parseInt(ms) >= 80 && Integer.parseInt(ms) <= 300) {
                     screen.getHighlighter().addHighlight(endOfDocument, endOfDocument + text.length(), new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW));
+                    yellows_counter++;
+                    yellows_counterLabel.setText(String.valueOf(yellows_counter));
 
                 } else {
 
                     screen.getHighlighter().addHighlight(endOfDocument, endOfDocument + text.length(), new DefaultHighlighter.DefaultHighlightPainter(Color.RED));
+                    reds_counter++;
+                    reds_counterLabel.setText(String.valueOf(reds_counter));
 
                 }
-
-
-
-//                screen.append(text + "\n");
-//                screen.setCaretPosition(screen.getDocument().getLength());
 
             } catch (BadLocationException e) {
                 throw new RuntimeException(e);
@@ -132,70 +161,6 @@ public class LogsPanel extends JPanel {
 
         });
     }
-
-//    private void appendText(String text, JTextArea screen) {
-//        SwingUtilities.invokeLater(() -> {
-//            this.text = text;
-//            endOfDocument = screen.getDocument().getLength();
-//
-//            try {
-//                ms = text.split("time=", 2)[1].split("ms", 2)[0];
-//            } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException){
-//                String errorMessage = "Something went wrong. \n";
-//
-//                screen.append(errorMessage);
-//                screen.setCaretPosition(endOfDocument);
-//
-//                try {
-//                    System.out.println("Start offset: " + (endOfDocument - errorMessage.length()));
-//                    System.out.println("End offset: " + endOfDocument);
-//
-//                    screen.getHighlighter().addHighlight((endOfDocument - errorMessage.length()), endOfDocument, new DefaultHighlighter.DefaultHighlightPainter(Color.red));
-//                } catch (BadLocationException e) {
-//                    throw new RuntimeException(e);
-//                }
-//
-//                return;
-//            }
-//
-//
-//            attemptsCounter++;
-//
-//            series.add(attemptsCounter, Integer.valueOf(ms));
-//
-//
-//
-//            try {
-//                System.out.println("Start offset: " + (endOfDocument - text.length()));
-//                System.out.println("End offset: " + endOfDocument);
-//
-//                if (Integer.parseInt(ms) > 0 && Integer.parseInt(ms) <= 80) {
-//                    screen.getHighlighter().addHighlight((endOfDocument - text.length()), endOfDocument, new DefaultHighlighter.DefaultHighlightPainter(Color.GREEN));
-//
-//                    screen.append(text + "\n");
-//                    screen.setCaretPosition(screen.getDocument().getLength());
-//
-//                    return;
-//                }
-//
-//                if (Integer.parseInt(ms) >= 80 && Integer.parseInt(ms) <= 300) {
-//                    screen.getHighlighter().addHighlight((endOfDocument - text.length()), endOfDocument, new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW));
-//
-//                } else {
-//
-//                    screen.getHighlighter().addHighlight((endOfDocument - text.length()), endOfDocument, new DefaultHighlighter.DefaultHighlightPainter(Color.RED));
-//
-//                }
-//
-//                screen.append(text + "\n");
-//                screen.setCaretPosition(screen.getDocument().getLength());
-//
-//            } catch (BadLocationException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//        });
-//    }
 
     public void setSeries(XYSeries series){
         this.series = series;
