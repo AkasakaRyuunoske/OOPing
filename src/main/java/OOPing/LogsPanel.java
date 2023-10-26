@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class LogsPanel extends JPanel {
     private JPanel statisticsPanel;
@@ -32,10 +31,18 @@ public class LogsPanel extends JPanel {
 
     private String ms;
     private int endOfDocument;
-    public LogsPanel(){
-        setLayout(new GridLayout(2,1));
+
+
+    private int average = 0;
+    private int displayedAverage = 0;
+    private JLabel averageLabel;
+
+    public LogsPanel() {
+        setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+
         statisticsPanel = new JPanel();
-        statisticsPanel.setLayout(new GridLayout(1,3));
+        statisticsPanel.setLayout(new GridLayout(1, 3));
 
         logsScreen = new JTextArea();
 
@@ -51,6 +58,13 @@ public class LogsPanel extends JPanel {
         title.setVerticalTextPosition(SwingConstants.TOP);
         title.setVerticalAlignment(SwingConstants.TOP);
 
+        averageLabel = new JLabel();
+        averageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        averageLabel.setVerticalTextPosition(SwingConstants.TOP);
+        averageLabel.setVerticalAlignment(SwingConstants.TOP);
+        averageLabel.setText(String.valueOf(displayedAverage));
+
+        // Statistics Panel stuff
         greens_counterLabel = new JLabel();
         greens_counterLabel.setBackground(Color.green);
         greens_counterLabel.setOpaque(true);
@@ -67,9 +81,41 @@ public class LogsPanel extends JPanel {
         statisticsPanel.add(reds_counterLabel);
         statisticsPanel.add(yellows_counterLabel);
 
-        add(title);
-        add(statisticsPanel);
-        add(screenScroll);
+
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+
+        add(title, gridBagConstraints);
+
+
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.anchor = GridBagConstraints.LAST_LINE_START;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 0;
+        add(screenScroll, gridBagConstraints);
+
+
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.3;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.anchor = GridBagConstraints.CENTER;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 0;
+        add(statisticsPanel, gridBagConstraints);
+
+
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.3;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.anchor = GridBagConstraints.CENTER;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 0;
+        add(averageLabel, gridBagConstraints);
 
         redirectCLIOutput(logsScreen, commands);
     }
@@ -78,8 +124,9 @@ public class LogsPanel extends JPanel {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(commands);
             processBuilder.redirectErrorStream(true);
+
             Process process = processBuilder.start();
-            System.out.println(process.info());
+
             InputStream inputStream = process.getInputStream();
 
             Thread outputReaderThread = new Thread(() -> {
@@ -104,20 +151,23 @@ public class LogsPanel extends JPanel {
             endOfDocument = screen.getDocument().getLength();
 
             try {
-                ms = text.split("time=", 2)[1].split("ms", 2)[0];
-            } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException){
+                ms = text.split("time=", 2)[1].split("ms", 2)[0]; ///#todo make it language independent
+            } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
                 String errorMessage = "Something went wrong. \n";
 
                 screen.append(errorMessage);
                 screen.setCaretPosition(endOfDocument);
 
                 try {
-//                    System.out.println("Start offset: " + (endOfDocument - errorMessage.length()));
-//                    System.out.println("End offset: " + endOfDocument);
 
                     screen.getHighlighter().addHighlight((endOfDocument - errorMessage.length()), endOfDocument, new DefaultHighlighter.DefaultHighlightPainter(Color.red));
-                } catch (BadLocationException e) {
-                    throw new RuntimeException(e);
+
+                } catch (BadLocationException badLocationException) {
+                    JOptionPane.showConfirmDialog(null,
+                            "Something went wrong. Error message: " + badLocationException.getMessage(),
+                            "Critical Application Error",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.ERROR_MESSAGE);
                 }
 
                 return;
@@ -126,6 +176,8 @@ public class LogsPanel extends JPanel {
 
             attemptsCounter++;
 
+            countAveragePing(Integer.parseInt(ms));
+            averageLabel.setText("Average: " + displayedAverage);
             series.add(attemptsCounter, Integer.valueOf(ms));
 
             screen.append(text + "\n");
@@ -162,7 +214,12 @@ public class LogsPanel extends JPanel {
         });
     }
 
-    public void setSeries(XYSeries series){
+    public void setSeries(XYSeries series) {
         this.series = series;
+    }
+
+    private void countAveragePing(int nextValue) {
+        average += nextValue;
+        displayedAverage = average / attemptsCounter;
     }
 }
