@@ -19,17 +19,17 @@ public class ButtonsPanel extends JPanel {
 
         strokeColorsPanel = new StrokeColorsPanel();
         title = new JLabel();
-        startStopButton = new JButton("Start button");
+        startStopButton = new JButton("Start OOPing");
+        startStopButton.setFocusable(false);
 
         title.setText("Here will be configuration buttons and stuff");
 
         title.setHorizontalAlignment(SwingConstants.CENTER);
 
-
-
         add(title);
         add(startStopButton);
 
+        // Acts as a <br><br><br><br> sequence. Will be replaced once this space is occupied with something useful
         add(new JLabel());
         add(new JLabel());
         add(new JLabel());

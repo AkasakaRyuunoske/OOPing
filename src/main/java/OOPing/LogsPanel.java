@@ -22,20 +22,16 @@ public class LogsPanel extends JPanel {
     private JLabel yellows_counterLabel;
     private int yellows_counter = 0;
     private JScrollPane screenScroll;
-
     private int attemptsCounter = 0;
-
     private XYSeries series;
 
     private String[] commands = {"C:\\Windows\\System32\\ping.exe", "www.youtube.com", "-n", "200000"};
 
     private String ms;
     private int endOfDocument;
-
-
     private int average = 0;
     private int displayedAverage = 0;
-    private JLabel averageLabel;
+    private final JLabel averageLabel;
 
     public LogsPanel() {
         setLayout(new GridBagLayout());
@@ -46,7 +42,7 @@ public class LogsPanel extends JPanel {
 
         logsScreen = new JTextArea();
 
-        logsScreen.append("Here you will see logs of ping execution \n");
+        logsScreen.append("Here you will see logs of OOPing execution \n");
 
         screenScroll = new JScrollPane(logsScreen);
         screenScroll.createHorizontalScrollBar();
@@ -62,7 +58,7 @@ public class LogsPanel extends JPanel {
         averageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         averageLabel.setVerticalTextPosition(SwingConstants.TOP);
         averageLabel.setVerticalAlignment(SwingConstants.TOP);
-        averageLabel.setText(String.valueOf(displayedAverage));
+        averageLabel.setText(displayedAverage + "ms");
 
         // Statistics Panel stuff
         greens_counterLabel = new JLabel();
@@ -159,7 +155,6 @@ public class LogsPanel extends JPanel {
                 screen.setCaretPosition(endOfDocument);
 
                 try {
-
                     screen.getHighlighter().addHighlight((endOfDocument - errorMessage.length()), endOfDocument, new DefaultHighlighter.DefaultHighlightPainter(Color.red));
 
                 } catch (BadLocationException badLocationException) {
@@ -173,11 +168,10 @@ public class LogsPanel extends JPanel {
                 return;
             }
 
-
             attemptsCounter++;
 
             countAveragePing(Integer.parseInt(ms));
-            averageLabel.setText("Average: " + displayedAverage);
+            averageLabel.setText("Average: " + displayedAverage + "ms");
             series.add(attemptsCounter, Integer.valueOf(ms));
 
             screen.append(text + "\n");
@@ -189,7 +183,6 @@ public class LogsPanel extends JPanel {
                     screen.getHighlighter().addHighlight(endOfDocument, endOfDocument + text.length(), new DefaultHighlighter.DefaultHighlightPainter(Color.GREEN));
                     greens_counter++;
                     greens_counterLabel.setText(String.valueOf(greens_counter));
-
 
                     return;
                 }

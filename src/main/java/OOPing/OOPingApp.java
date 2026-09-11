@@ -40,7 +40,6 @@ public class OOPingApp extends JFrame {
 
         buttonsPanel = new ButtonsPanel();
 
-        System.out.println(renderer);
         buttonsPanel.setChartRenderer(renderer);
 
         gridBagConstraints.fill = GridBagConstraints.VERTICAL;
