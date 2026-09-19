@@ -15,11 +15,17 @@ public class LogsPanel extends JPanel {
     private JPanel statisticsPanel;
     private JTextArea logsScreen;
     private JLabel title;
-    private JLabel greens_counterLabel;
+
+    private JLabel greensLabel;
+    private JLabel greensCounterLabel;
     private int greens_counter = 0;
-    private JLabel reds_counterLabel;
+
+    private JLabel redsLabel;
+    private JLabel redsCounterLabel;
     private int reds_counter = 0;
-    private JLabel yellows_counterLabel;
+
+    private JLabel yellowsLabel;
+    private JLabel yellowsCounterLabel;
     private int yellows_counter = 0;
     private JScrollPane screenScroll;
     private int attemptsCounter = 0;
@@ -38,7 +44,7 @@ public class LogsPanel extends JPanel {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
 
         statisticsPanel = new JPanel();
-        statisticsPanel.setLayout(new GridLayout(1, 3));
+        statisticsPanel.setLayout(new GridLayout(2, 3));
 
         logsScreen = new JTextArea();
 
@@ -58,24 +64,46 @@ public class LogsPanel extends JPanel {
         averageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         averageLabel.setVerticalTextPosition(SwingConstants.TOP);
         averageLabel.setVerticalAlignment(SwingConstants.TOP);
-        averageLabel.setText(displayedAverage + "ms");
+        averageLabel.setText("Average: " + displayedAverage + "ms");
+
+        greensLabel = new JLabel();
+        greensLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        greensLabel.setVerticalTextPosition(SwingConstants.TOP);
+        greensLabel.setVerticalAlignment(SwingConstants.TOP);
+        greensLabel.setText("<= 80ms");
+
+        redsLabel = new JLabel();
+        redsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        redsLabel.setVerticalTextPosition(SwingConstants.TOP);
+        redsLabel.setVerticalAlignment(SwingConstants.TOP);
+        redsLabel.setText(">= 300ms");
+
+        yellowsLabel = new JLabel();
+        yellowsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        yellowsLabel.setVerticalTextPosition(SwingConstants.TOP);
+        yellowsLabel.setVerticalAlignment(SwingConstants.TOP);
+        yellowsLabel.setText("< 300ms");
+
+        statisticsPanel.add(greensLabel);
+        statisticsPanel.add(redsLabel);
+        statisticsPanel.add(yellowsLabel);
 
         // Statistics Panel stuff
-        greens_counterLabel = new JLabel();
-        greens_counterLabel.setBackground(Color.green);
-        greens_counterLabel.setOpaque(true);
+        greensCounterLabel = new JLabel();
+        greensCounterLabel.setBackground(Color.green);
+        greensCounterLabel.setOpaque(true);
 
-        reds_counterLabel = new JLabel();
-        reds_counterLabel.setBackground(Color.red);
-        reds_counterLabel.setOpaque(true);
+        redsCounterLabel = new JLabel();
+        redsCounterLabel.setBackground(Color.red);
+        redsCounterLabel.setOpaque(true);
 
-        yellows_counterLabel = new JLabel();
-        yellows_counterLabel.setBackground(Color.yellow);
-        yellows_counterLabel.setOpaque(true);
+        yellowsCounterLabel = new JLabel();
+        yellowsCounterLabel.setBackground(Color.yellow);
+        yellowsCounterLabel.setOpaque(true);
 
-        statisticsPanel.add(greens_counterLabel);
-        statisticsPanel.add(reds_counterLabel);
-        statisticsPanel.add(yellows_counterLabel);
+        statisticsPanel.add(greensCounterLabel);
+        statisticsPanel.add(redsCounterLabel);
+        statisticsPanel.add(yellowsCounterLabel);
 
 
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -113,10 +141,10 @@ public class LogsPanel extends JPanel {
         gridBagConstraints.gridx = 0;
         add(averageLabel, gridBagConstraints);
 
-        redirectCLIOutput(logsScreen, commands);
+//        redirectCLIOutput();
     }
 
-    private void redirectCLIOutput(JTextArea screen, String[] commands) {
+    public void redirectCLIOutput() {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(commands);
             processBuilder.redirectErrorStream(true);
@@ -129,7 +157,7 @@ public class LogsPanel extends JPanel {
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
-                        appendText((attemptsCounter + 1) + ": " + line, screen);
+                        appendText((attemptsCounter + 1) + ": " + line, logsScreen);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -178,11 +206,10 @@ public class LogsPanel extends JPanel {
             screen.setCaretPosition(screen.getDocument().getLength());
 
             try {
-
                 if (Integer.parseInt(ms) > 0 && Integer.parseInt(ms) <= 80) {
                     screen.getHighlighter().addHighlight(endOfDocument, endOfDocument + text.length(), new DefaultHighlighter.DefaultHighlightPainter(Color.GREEN));
                     greens_counter++;
-                    greens_counterLabel.setText(String.valueOf(greens_counter));
+                    greensCounterLabel.setText(String.valueOf(greens_counter));
 
                     return;
                 }
@@ -190,13 +217,13 @@ public class LogsPanel extends JPanel {
                 if (Integer.parseInt(ms) >= 80 && Integer.parseInt(ms) <= 300) {
                     screen.getHighlighter().addHighlight(endOfDocument, endOfDocument + text.length(), new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW));
                     yellows_counter++;
-                    yellows_counterLabel.setText(String.valueOf(yellows_counter));
+                    yellowsCounterLabel.setText(String.valueOf(yellows_counter));
 
                 } else {
 
                     screen.getHighlighter().addHighlight(endOfDocument, endOfDocument + text.length(), new DefaultHighlighter.DefaultHighlightPainter(Color.RED));
                     reds_counter++;
-                    reds_counterLabel.setText(String.valueOf(reds_counter));
+                    redsCounterLabel.setText(String.valueOf(reds_counter));
 
                 }
 

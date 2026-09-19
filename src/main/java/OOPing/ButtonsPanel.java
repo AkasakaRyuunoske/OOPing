@@ -4,8 +4,10 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class ButtonsPanel extends JPanel {
+public class ButtonsPanel extends JPanel implements ActionListener {
     private JLabel title;
 
     private JButton startStopButton;
@@ -14,14 +16,18 @@ public class ButtonsPanel extends JPanel {
 
     private XYLineAndShapeRenderer renderer;
 
-    public ButtonsPanel(){
+    private LogsPanel logsPanel;
+
+    public ButtonsPanel(LogsPanel logsPanel){
+        this.logsPanel = logsPanel;
+
         setLayout(new GridLayout(10, 1));
 
         strokeColorsPanel = new StrokeColorsPanel();
         title = new JLabel();
         startStopButton = new JButton("Start OOPing");
         startStopButton.setFocusable(false);
-
+        startStopButton.addActionListener(this::actionPerformed);
         title.setText("Here will be configuration buttons and stuff");
 
         title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -43,5 +49,12 @@ public class ButtonsPanel extends JPanel {
     public void setChartRenderer(XYLineAndShapeRenderer renderer){
         this.renderer = renderer;
         strokeColorsPanel.setChartRenderer(renderer);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == startStopButton) {
+            logsPanel.redirectCLIOutput();
+        }
     }
 }

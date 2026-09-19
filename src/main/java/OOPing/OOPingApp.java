@@ -38,7 +38,7 @@ public class OOPingApp extends JFrame {
         logsPanel = new LogsPanel();
         logsPanel.setSeries(series);
 
-        buttonsPanel = new ButtonsPanel();
+        buttonsPanel = new ButtonsPanel(logsPanel);
 
         buttonsPanel.setChartRenderer(renderer);
 
