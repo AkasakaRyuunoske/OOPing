@@ -18,3 +18,10 @@ OOPing Running screen:
 - AWT
 - Swing
 - Jfreechart
+
+# Usage for Standalone app:
+
+# Usage for Development:
+- clone this repository in IDE of your choice (Intelij IDEA is suggested)
+- Install maven dependecies
+- Run main class OOPing.java (found at src/main/java/OOPing/OOPing.java)
