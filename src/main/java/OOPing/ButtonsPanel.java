@@ -38,10 +38,11 @@ public class ButtonsPanel extends JPanel implements ActionListener {
 
         add(title);
         add(startStopButton);
+
+        add(new JLabel());
         add(executedCommandComposerPanel);
 
         // Acts as a <br><br><br><br> sequence. Will be replaced once this space is occupied with something useful
-        add(new JLabel());
         add(new JLabel());
         add(new JLabel());
         add(new JLabel());

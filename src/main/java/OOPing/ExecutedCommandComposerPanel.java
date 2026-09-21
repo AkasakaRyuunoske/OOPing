@@ -12,8 +12,6 @@ public class ExecutedCommandComposerPanel extends JPanel implements ActionListen
     private JTextField pingCommandTextField;
     private JTextField pingCountTextField;
 
-
-
     private JButton startStopButton;
 
     public ExecutedCommandComposerPanel(JButton startStopButton){
