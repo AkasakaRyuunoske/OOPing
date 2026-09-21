@@ -12,6 +12,8 @@ public class ButtonsPanel extends JPanel implements ActionListener {
 
     private JButton startStopButton;
 
+    private ExecutedCommandComposerPanel executedCommandComposerPanel;
+
     private StrokeColorsPanel strokeColorsPanel;
 
     private XYLineAndShapeRenderer renderer;
@@ -32,11 +34,13 @@ public class ButtonsPanel extends JPanel implements ActionListener {
 
         title.setHorizontalAlignment(SwingConstants.CENTER);
 
+        executedCommandComposerPanel = new ExecutedCommandComposerPanel(startStopButton);
+
         add(title);
         add(startStopButton);
+        add(executedCommandComposerPanel);
 
         // Acts as a <br><br><br><br> sequence. Will be replaced once this space is occupied with something useful
-        add(new JLabel());
         add(new JLabel());
         add(new JLabel());
         add(new JLabel());
