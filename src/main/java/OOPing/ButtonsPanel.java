@@ -10,17 +10,21 @@ import java.awt.event.ActionListener;
 public class ButtonsPanel extends JPanel implements ActionListener {
     private JLabel title;
 
-    private JButton startStopButton;
+    private final JButton startStopButton;
 
     private ExecutedCommandComposerPanel executedCommandComposerPanel;
 
-    private StrokeColorsPanel strokeColorsPanel;
+    private JLabel strokeColorsLabel;
+
+    private final StrokeColorsPanel strokeColorsPanel;
 
     private XYLineAndShapeRenderer renderer;
 
-    private LogsPanel logsPanel;
+    private final LogsPanel logsPanel;
 
-    public ButtonsPanel(LogsPanel logsPanel){
+    final private Font componentsDescriptionLabelsFont = new Font("Serif", Font.BOLD, 18);
+
+    public ButtonsPanel(LogsPanel logsPanel) {
         this.logsPanel = logsPanel;
 
         setLayout(new GridLayout(10, 1));
@@ -30,28 +34,39 @@ public class ButtonsPanel extends JPanel implements ActionListener {
         startStopButton = new JButton("Start OOPing");
         startStopButton.setFocusable(false);
         startStopButton.addActionListener(this::actionPerformed);
-        title.setText("Here will be configuration buttons and stuff");
+        title.setText("Here will be configuration buttons and stuff:");
+        title.setFont(componentsDescriptionLabelsFont);
 
         title.setHorizontalAlignment(SwingConstants.CENTER);
 
-        executedCommandComposerPanel = new ExecutedCommandComposerPanel(startStopButton);
 
         add(title);
         add(startStopButton);
 
         add(new JLabel());
+
+        JLabel executedCommandComposerLabel = new JLabel();
+        executedCommandComposerLabel.setText("Ping that will be executed:");
+        executedCommandComposerLabel.setFont(componentsDescriptionLabelsFont);
+        add(executedCommandComposerLabel);
+
+        executedCommandComposerPanel = new ExecutedCommandComposerPanel(startStopButton);
         add(executedCommandComposerPanel);
 
-        // Acts as a <br><br><br><br> sequence. Will be replaced once this space is occupied with something useful
+        // Acts as a <br><br> sequence.
+        // Will be replaced once this space is occupied with something useful
         add(new JLabel());
         add(new JLabel());
-        add(new JLabel());
-        add(new JLabel());
+
+        strokeColorsLabel = new JLabel();
+        strokeColorsLabel.setText("Select color for chart line:");
+        strokeColorsLabel.setFont(componentsDescriptionLabelsFont);
+        add(strokeColorsLabel);
 
         add(strokeColorsPanel);
     }
 
-    public void setChartRenderer(XYLineAndShapeRenderer renderer){
+    public void setChartRenderer(XYLineAndShapeRenderer renderer) {
         this.renderer = renderer;
         strokeColorsPanel.setChartRenderer(renderer);
     }

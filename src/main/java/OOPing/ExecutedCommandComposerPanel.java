@@ -47,7 +47,8 @@ public class ExecutedCommandComposerPanel extends JPanel implements ActionListen
         // Ping Count Text Field:
         pingCountTextField = new JTextField();
         pingCountTextField.addActionListener(this::actionPerformed);
-        urlToPingTextField.getDocument().addDocumentListener(new NumberFieldValidation(pingCountTextField, startStopButton));
+        pingCountTextField.getDocument().addDocumentListener(new NumberFieldValidation(pingCountTextField, startStopButton));
+        pingCountTextField.setText("200");
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
