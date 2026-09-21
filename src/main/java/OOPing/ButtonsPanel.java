@@ -32,6 +32,7 @@ public class ButtonsPanel extends JPanel implements ActionListener {
         strokeColorsPanel = new StrokeColorsPanel();
         title = new JLabel();
         startStopButton = new JButton("Start OOPing");
+        startStopButton.setFont(componentsDescriptionLabelsFont);
         startStopButton.setFocusable(false);
         startStopButton.addActionListener(this::actionPerformed);
         title.setText("Here will be configuration buttons and stuff:");
@@ -50,8 +51,16 @@ public class ButtonsPanel extends JPanel implements ActionListener {
         executedCommandComposerLabel.setFont(componentsDescriptionLabelsFont);
         add(executedCommandComposerLabel);
 
+        // A wrapper panel to offset executedCommandComposerPanel
+        // from being in the middle. Quite bad but can't think of better solution
+        JPanel executedCommandComposerPanelWrapper = new JPanel();
+        executedCommandComposerPanelWrapper.setLayout(new GridLayout(1,2));
+
         executedCommandComposerPanel = new ExecutedCommandComposerPanel(startStopButton);
-        add(executedCommandComposerPanel);
+
+        executedCommandComposerPanelWrapper.add(executedCommandComposerPanel);
+        executedCommandComposerPanelWrapper.add(new JLabel());
+        add(executedCommandComposerPanelWrapper);
 
         // Acts as a <br><br> sequence.
         // Will be replaced once this space is occupied with something useful

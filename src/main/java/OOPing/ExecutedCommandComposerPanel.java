@@ -27,7 +27,7 @@ public class ExecutedCommandComposerPanel extends JPanel implements ActionListen
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.gridwidth = 2;
 
         add(pingCommandTextField, gridBagConstraints);
 
@@ -52,7 +52,7 @@ public class ExecutedCommandComposerPanel extends JPanel implements ActionListen
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.gridwidth = 2;
 
         add(pingCountTextField, gridBagConstraints);
     }
