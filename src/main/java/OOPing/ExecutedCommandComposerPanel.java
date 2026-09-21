@@ -57,6 +57,12 @@ public class ExecutedCommandComposerPanel extends JPanel implements ActionListen
         add(pingCountTextField, gridBagConstraints);
     }
 
+    public String[] buildCommandFromInput(){
+        String[] commands = {"C:\\Windows\\System32\\ping.exe", "www.youtube.com", "-n", "200000"};
+
+        return commands;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 

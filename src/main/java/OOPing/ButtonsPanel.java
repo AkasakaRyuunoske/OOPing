@@ -24,6 +24,10 @@ public class ButtonsPanel extends JPanel implements ActionListener {
 
     final private Font componentsDescriptionLabelsFont = new Font("Serif", Font.BOLD, 18);
 
+    private boolean isRunning = false;
+
+    final private String START_BUTTON_TEXT = "Start OOPing";
+    final private String STOP_BUTTON_TEXT = "Stop OOPing";
     public ButtonsPanel(LogsPanel logsPanel) {
         this.logsPanel = logsPanel;
 
@@ -31,7 +35,7 @@ public class ButtonsPanel extends JPanel implements ActionListener {
 
         strokeColorsPanel = new StrokeColorsPanel();
         title = new JLabel();
-        startStopButton = new JButton("Start OOPing");
+        startStopButton = new JButton(START_BUTTON_TEXT);
         startStopButton.setFont(componentsDescriptionLabelsFont);
         startStopButton.setFocusable(false);
         startStopButton.addActionListener(this::actionPerformed);
@@ -83,7 +87,17 @@ public class ButtonsPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == startStopButton) {
-            logsPanel.redirectCLIOutput();
+            if(isRunning){
+                isRunning = false;
+
+                logsPanel.stopRedirectCLIOutput();
+                startStopButton.setText(START_BUTTON_TEXT);
+            } else {
+                isRunning = true;
+
+                logsPanel.startRedirectCLIOutput(executedCommandComposerPanel.buildCommandFromInput());
+                startStopButton.setText(STOP_BUTTON_TEXT);
+            }
         }
     }
 }

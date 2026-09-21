@@ -39,6 +39,9 @@ public class LogsPanel extends JPanel {
     private int displayedAverage = 0;
     private final JLabel averageLabel;
 
+    private Process process;
+    private Thread outputReaderThread;
+
     public LogsPanel() {
         setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -144,29 +147,65 @@ public class LogsPanel extends JPanel {
 //        redirectCLIOutput();
     }
 
-    public void redirectCLIOutput() {
+    public void startRedirectCLIOutput(String[] commands) {
+        if (process != null && process.isAlive()) {
+            return; // Already running
+        }
+
+        System.out.println("commands => " + commands);
+
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(commands);
             processBuilder.redirectErrorStream(true);
 
-            Process process = processBuilder.start();
+            process = processBuilder.start();
 
             InputStream inputStream = process.getInputStream();
 
-            Thread outputReaderThread = new Thread(() -> {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            outputReaderThread = new Thread(() -> {
+                try (BufferedReader reader =
+                             new BufferedReader(new InputStreamReader(inputStream))) {
+
                     String line;
-                    while ((line = reader.readLine()) != null) {
-                        appendText((attemptsCounter + 1) + ": " + line, logsScreen);
+
+                    while (!Thread.currentThread().isInterrupted()
+                            && (line = reader.readLine()) != null) {
+
+                        appendText(
+                                (attemptsCounter + 1) + ": " + line,
+                                logsScreen
+                        );
                     }
+
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    // Expected when the process is stopped
+                    if (!Thread.currentThread().isInterrupted()) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
             outputReaderThread.start();
+
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void stopRedirectCLIOutput() {
+        if (process != null) {
+            process.destroy();
+
+            if (process.isAlive()) {
+                process.destroyForcibly();
+            }
+
+            process = null;
+        }
+
+        if (outputReaderThread != null) {
+            outputReaderThread.interrupt();
+            outputReaderThread = null;
         }
     }
 
