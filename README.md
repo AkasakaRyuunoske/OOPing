@@ -13,15 +13,7 @@ OOPing Startup screen:
 OOPing Running screen: 
 <img src="readme_resources/OOPing running.png">
 
-# Technologies
-- Java 17.0
-- AWT
-- Swing
-- Jfreechart
-
 # Usage for Standalone app:
-
-
 - Go to [releases](https://github.com/AkasakaRyuunoske/OOPing/releases)
 - Under the lates version download OOPing.jar
 - Make sure you have JRE installed on your machine
@@ -31,3 +23,9 @@ OOPing Running screen:
 - clone this repository in IDE of your choice (Intelij IDEA is suggested)
 - Install maven dependecies
 - Run main class OOPing.java (found at src/main/java/OOPing/OOPing.java)
+  
+# Technologies
+- Java 17.0
+- AWT
+- Swing
+- Jfreechart
