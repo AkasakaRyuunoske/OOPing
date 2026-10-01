@@ -69,6 +69,7 @@ public class StrokeColorsPanel extends JPanel implements ActionListener {
 
         // Todo custom color picker
         customColorPickerButton.setText("Custom");
+        customColorPickerButton.setFocusable(false);
         add(customColorPickerButton);
     }
 
