@@ -1,7 +1,6 @@
-# OOPing
-<b> Overengineered Overcomplicated Ping </b>
+# OOPing - Overengineered Overcomplicated Ping
 
-OOPing Startup screen: 
+<bold>OOPing Startup screen:</bold>
 <img src="readme_resources/OOPing idle.png">
 
 # Features
