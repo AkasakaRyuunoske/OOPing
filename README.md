@@ -1,6 +1,6 @@
 # OOPing - Overengineered Overcomplicated Ping
 
-<bold>OOPing Startup screen:</bold>
+<h3>OOPing Startup screen:</h3>
 <img src="readme_resources/OOPing idle.png">
 
 # Features
@@ -8,7 +8,7 @@
 - Ability to choose which endpoint to ping and number of attempts.
 - Ability to ping more than one endpoint simultaneously (tbd).
 
-OOPing Running screen: 
+<h3>OOPing Running screen:</h3> 
 <img src="readme_resources/OOPing running.png">
 
 # Usage for Standalone app:
