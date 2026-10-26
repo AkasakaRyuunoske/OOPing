@@ -71,7 +71,7 @@ public class OOPingApp extends JFrame {
         dataset.addSeries(series);
 
         JFreeChart chart = ChartFactory.createXYLineChart(
-                "Ping by Mokson",
+                "",
                 "Attempts",
                 "ms",
                 dataset,
@@ -99,7 +99,7 @@ public class OOPingApp extends JFrame {
 
         chart.getLegend().setFrame(BlockBorder.NONE);
 
-        chart.setTitle(new TextTitle("Ping - Pong", new Font("Serif", java.awt.Font.BOLD, 18)));
+//        chart.setTitle(new TextTitle("Ping - Pong", new Font("Serif", java.awt.Font.BOLD, 18)));
 
         return chart;
     }
