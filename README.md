@@ -15,7 +15,6 @@
 - Go to [releases](https://github.com/AkasakaRyuunoske/OOPing/releases)
 - Under the lates version download OOPing.jar
 - Make sure you have JRE installed on your machine
-(Executables are tested only on Windows 11)
 
 # Usage for Development:
 - clone this repository in IDE of your choice (Intelij IDEA is suggested)
